@@ -1,1 +1,12 @@
-# aula-react-api-33
+# React + API
+
+
+## Project setup
+```
+npm install
+```
+
+### Run
+```
+npm run start
+```
