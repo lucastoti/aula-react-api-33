@@ -1,17 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { 
+  Button,
+  Container,
+  Row,
+  Col,
+  Toast
+} from 'react-bootstrap';
+import { ListaTutorial } from './components/listaTutorial';
+import './HomePage.css';
+
 
 const App = () => {
-  const [listaProdutos, setListaProdutos] = useState([]);
+  const [lista, setLista] = useState([]);
   const [produto, setProduto] = useState({});
   const [produtoAtualizado, setProdutoAtualizado] = useState({});
   const [id, setId] = useState(null);
   const [titulo, setTitulo] = useState('');
+  const [tutorialDeletado, setTutorialDeletado] = useState(null);
+
+  const [showError, setShowError] = useState(false);
+
+  // useEffect(() => {
+  //   getLista();
+  // }, []); // essa função vai ser chamada no inicio da pagina
+
+  useEffect(() => {
+    if(id) {
+      buscarPorID();
+    } else {
+      getLista();
+    }
+  }, [id]);
 
   const getLista = () => {
-    fetch('https://dummyjson.com/products')
+    fetch('http://localhost:9000/api/tutorials')
     .then(data => data.json())
     .then(resposta => {
-      setListaProdutos(resposta.products);
+      setLista(resposta);
+    });
+  };
+
+  const buscarPorID = () => {
+    let URL = 'http://localhost:9000/api/tutorials/' + id;
+    fetch(URL)
+    .then(data => data.json())
+    .then(resposta => {
+      if (resposta.message) {
+        setShowError(true);
+      } else {
+        setLista([resposta]);
+      }
     });
   };
 
@@ -45,35 +83,70 @@ const App = () => {
     });
   };
 
+    const deletarTutorialId = () => {
+    let URL = 'http://localhost:9000/api/tutorials/' + id;
+    fetch(URL, {
+      method: 'DELETE'
+    })
+    .then(data => data.json())
+    .then(resposta => {
+      console.log(resposta);
+      setTutorialDeletado(resposta);
+    });
+  };
+
   return (
-    <div>
-      <div>
-        <button onClick={getLista} style={{ borderColor: 'blue' }}>Trazer a lista</button>
+   <Container>
+    <Row className='row-spacing'>
+      <Col>
+        ID:<input placeholder="ID" onChange={(event) => setId(event.target.value)} />
+        {/*<Button variant="primary" onClick={getLista}>Trazer a lista</Button>*/}
         {
-          listaProdutos.length ?
-          listaProdutos.map(produto => {
-            return <div key={produto.id}>{produto.title}</div>
-          })
+          lista.length ?
+          <ListaTutorial lista={lista} />
           : <div></div>
         }
-      </div>
-      <br /><br /><br />
-      <div>
+      </Col>
+    </Row>
+{/*    <Row className='row-spacing'>
+      <Col>
         <input placeholder="ID" onChange={(event) => valorDigitado(event)} />
         <button onClick={getProdutoId} style={{ borderColor: 'red' }}>Buscar por ID</button>
         <br />
         { produto ? produto.description : '' }
-      </div>
-      <br /><br /><br />
-      <div>
+      </Col>
+    </Row>
+    <Row className='row-spacing'>
+      <Col>
         <input placeholder="ID" onChange={(event) => valorDigitado(event)} /><br />
         Titulo:<input placeholder="Titulo" onChange={(event) => setTitulo(event.target.value)} />
         <button onClick={atualizarProdutoId} style={{ borderColor: 'red' }}>Atualizar por ID</button>
         
         <br />
         Atualizado:{ produtoAtualizado ? JSON.stringify(produtoAtualizado) : '' }
-      </div>
-    </div>
+      </Col>
+    </Row>
+    <Row className='row-spacing'>
+      <Col>
+        <input placeholder="ID" onChange={(event) => valorDigitado(event)} />
+        <Button onClick={deletarTutorialId}>Deletar por ID</Button>
+
+        <div>
+          {
+            tutorialDeletado !== null && tutorialDeletado.message ?
+            <span>{tutorialDeletado.message}</span> :
+            <span></span>
+          }
+        </div>
+      </Col>
+    </Row>*/}
+    <Toast className='toti-toast' onClose={() => setShowError(false)} show={showError} delay={3000} autohide> 
+      <Toast.Header>
+        Houve um erro
+      </Toast.Header>
+      <Toast.Body>Tutorial não encontrado</Toast.Body>
+    </Toast>
+  </Container>
   );
 };
 

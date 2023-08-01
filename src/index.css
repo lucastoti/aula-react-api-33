@@ -1,0 +1,7 @@
+.toti-toast {
+	position: absolute !important;
+    top: 10px !important;
+    width: auto !important;
+    right: 10px !important;
+    background-color: purple !important;
+}

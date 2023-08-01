@@ -1,6 +1,9 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client'
 import HomePage from "./HomePage";
+import NewHomePage from "./NewHomePage";
+import './index.css';
+// bootstrap
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-ReactDOM.render(<HomePage />, document.getElementById("app"));
-
+createRoot(document.getElementById('app')).render(<HomePage />)
