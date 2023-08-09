@@ -6,4 +6,4 @@ import './index.css';
 // bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-createRoot(document.getElementById('app')).render(<HomePage />)
+createRoot(document.getElementById('app')).render(<NewHomePage />)

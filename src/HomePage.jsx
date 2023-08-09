@@ -17,6 +17,7 @@ const App = () => {
   const [id, setId] = useState(null);
   const [titulo, setTitulo] = useState('');
   const [tutorialDeletado, setTutorialDeletado] = useState(null);
+  const [contador, setContador] = useState(0);
 
   const [showError, setShowError] = useState(false);
 
